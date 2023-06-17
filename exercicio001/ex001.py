@@ -2,15 +2,20 @@
 # self.vertices = { vertex: {destination: weight} }
 
 class Graph:
+    
+    
     def __init__(self):
         self.vertices = {}
         
         
     def add_vertex(self, vertex):
-        if vertex not in self.vertices:
-            self.vertices[vertex] = {}
+        if len(self.vertices) < 20:
+            if vertex not in self.vertices:
+                self.vertices[vertex] = {}
+            else:
+                print("Vertex already exists")
         else:
-            print("Vertex already exists")
+            print("Vertices list if full")
 
 
     def add_edge(self, source, destination, weight):
@@ -28,10 +33,9 @@ class Graph:
             if edges:
                 for destination, weight in edges.items():
                     print(vertex, " -> ", destination, "| weight:", weight)
-            
-            print("")
+                print("")
               
-                
+                         
 graph = Graph()
 
 graph.add_vertex(1)
