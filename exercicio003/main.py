@@ -1,6 +1,5 @@
 class Graph:
     def __init__(self, vertices):
-        self.verticies = vertices
         self.graph = {}
         
     def add_edge(self, u, v, w):
@@ -31,15 +30,14 @@ def read_graph_from_file(filename):
     
     
 def main():
-    filename = "grafo.txt"
+    filename = "exercicio003/adjacency-matrix.txt"
     g = read_graph_from_file(filename)
     
-    for i in range(5):
-        for j in range(5):
-            print(g[i])
-    
-    
-    
+    # for i in range(5):
+    #     for j in range(5):
+            # print(g.graph)
+            
+    print(g.graph)
     
 
     # agm_result = g.kruskal()
