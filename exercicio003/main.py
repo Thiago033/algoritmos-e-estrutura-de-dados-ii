@@ -1,49 +1,92 @@
-class Graph:
-    def __init__(self, vertices):
-        self.graph = {}
+import sys
+import os
+
+MAX_NODES = 9
+
+def union(parent, rank, x, y):
+    root_x = find_parent(parent, x)
+    root_y = find_parent(parent, y)
+
+    if rank[root_x] < rank[root_y]:
+        parent[root_x] = root_y
+    elif rank[root_x] > rank[root_y]:
+        parent[root_y] = root_x
+    else:
+        parent[root_y] = root_x
+        rank[root_x] += 1
+
+
+def find_parent(parent, index):
+    if parent[index] == index:
+        return index
+    
+    return find_parent(parent, parent[index])
+
+
+def kruskal(graph):
+    edges = []
+    
+    for row in graph:
+        for col in graph[row]:
+            edges.append((row, col, graph[row][col]))
+    
+    # sort edges by weight value
+    edges = sorted(edges, key=lambda item: item[2])
+    
+    parent = []
+    rank = []
+    
+    for node in range(MAX_NODES):
+        parent.append(node)
+        rank.append(0)
+    
+    result = []
+    count = 0
+    index = 0
+
+    while count < (MAX_NODES - 1):
+        vertice_1, vertice_2, weight = edges[index]
+        index += 1
         
-    def add_edge(self, u, v, w):
-        if u not in self.graph:
-            self.graph[u] = {}
-        if v not in self.graph:
-            self.graph[v] = {}
+        x = find_parent(parent, vertice_1)
+        y = find_parent(parent, vertice_2)
+        
+        if x != y:
+            count += 1
+            result.append((vertice_1, vertice_2, weight))
+            union(parent, rank, x, y)
 
-        self.graph[u][v] = w
-        self.graph[v][u] = w
-
-    
-    
-def read_graph_from_file(filename):
-    with open(filename, "r") as file:
-        lines = file.readlines()
-        num_vertices = len(lines)
-        graph = Graph(num_vertices)
-
-        for i in range(num_vertices):
-            line_values = lines[i].strip().split()
-            for j in range(num_vertices):
-                weight = int(line_values[j])
-                if weight != 0:
-                    graph.add_edge(i, j, weight)
-
-        return graph
-    
+    return result
     
 def main():
-    filename = "exercicio003/adjacency-matrix.txt"
-    g = read_graph_from_file(filename)
+    graph = {}
     
-    # for i in range(5):
-    #     for j in range(5):
-            # print(g.graph)
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_directory, 'adjacency-matrix.txt')
+    
+    with open(file_path, "r") as file:
+        lines = file.readlines()
+        
+        for row in range(MAX_NODES):
+            line_values = lines[row].strip().split()
             
-    print(g.graph)
-    
+            for column in range(MAX_NODES):
+                weight = int(line_values[column])
+                
+                if weight != 0:
+                    if row not in graph:
+                        graph[row] = {}
+                    
+                    graph[row][column] = weight
 
-    # agm_result = g.kruskal()
-    # print("Árvore Geradora Mínima:")
-    # for u, v, weight in agm_result:
-    #     print(f"{u} -- {v} | Peso: {weight}")
+    # print(graph)
+
+    result = kruskal(graph)
+    
+    # print(result)
+    
+    for row, col, weight in result:
+        print(f"{row} -> {col} | Weight: {weight}")
         
         
 if __name__ == "__main__":
