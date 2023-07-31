@@ -65,18 +65,11 @@ def main():
     
     graph = [[0] * MAX_NODES for _ in range(MAX_NODES)]
     
-    #############################################
-    # Reading a file with the adjacency matrix: #
-    #############################################
-    
-    # Get the current directory
+    # Reading a file with the adjacency matrix:
     current_directory = os.path.dirname(os.path.abspath(__file__))
-    # Construct the file path
     file_path = os.path.join(current_directory, 'adjacency-matrix.txt')
     
-    # Open the file
     with open(file_path, 'r') as file:
-        # Iterate over each line in the file
         i = 0
         for line in file:
             values = line.split()
