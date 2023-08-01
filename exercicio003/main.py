@@ -4,16 +4,15 @@ import os
 MAX_NODES = 9
 
 def union(parent, rank, x, y):
-    root_x = find_parent(parent, x)
-    root_y = find_parent(parent, y)
-
-    if rank[root_x] < rank[root_y]:
-        parent[root_x] = root_y
-    elif rank[root_x] > rank[root_y]:
-        parent[root_y] = root_x
+    if rank[x] < rank[y]:
+        parent[x] = y
+        
+    elif rank[x] > rank[y]:
+        parent[y] = x
+        
     else:
-        parent[root_y] = root_x
-        rank[root_x] += 1
+        parent[y] = x
+        rank[x] += 1
 
 
 def find_parent(parent, index):
@@ -41,10 +40,10 @@ def kruskal(graph):
         rank.append(0)
     
     result = []
-    count = 0
+    edges_count = 0
     index = 0
 
-    while count < (MAX_NODES - 1):
+    while edges_count < (MAX_NODES - 1):
         vertice_1, vertice_2, weight = edges[index]
         index += 1
         
@@ -52,7 +51,7 @@ def kruskal(graph):
         y = find_parent(parent, vertice_2)
         
         if x != y:
-            count += 1
+            edges_count += 1
             result.append((vertice_1, vertice_2, weight))
             union(parent, rank, x, y)
 
